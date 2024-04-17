@@ -2,11 +2,13 @@ package com.sign.in.controller;
 
 import com.sign.in.common.R;
 import com.sign.in.entity.IUser;
+import com.sign.in.entity.domain.IUserVO;
 import com.sign.in.mapper.IUserMapper;
 import com.sign.in.service.IMTService;
 import com.sign.in.service.IShopService;
 import com.sign.in.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -17,14 +19,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/imt/user")
-@RequiredArgsConstructor
 public class IUserController {
-
-    private final IUserService iUserService;
-    private final IUserMapper iUserMapper;
-    private final IMTService imtService;
-    private final IShopService iShopService;
-
+    @Autowired
+    private IUserService iUserService;
     /**
      * 查询I茅台用户列表
      */
@@ -37,18 +34,16 @@ public class IUserController {
      * 发送验证码
      */
     @GetMapping(value = "/sendCode", name = "发送验证码")
-    public R sendCode(String mobile, String deviceId) {
-        imtService.sendCode(mobile, deviceId);
-
-        return R.ok();
+    public R sendCode(@RequestParam String mobile, String deviceId) {
+        return iUserService.sendCode(mobile,deviceId);
     }
 
     /**
      * 预约
      */
     @GetMapping(value = "/reservation", name = "预约")
-    public R reservation(String mobile) {
-        return R.ok();
+    public R reservation(@RequestParam String mobile) {
+        return iUserService.reservation(mobile);
     }
 
     /**
@@ -80,7 +75,8 @@ public class IUserController {
      * 新增I茅台用户
      */
     @PostMapping(name = "新增I茅台用户")
-    public R add(@RequestBody IUser iUser) {
+    public R add(@RequestBody IUserVO iUserVO) {
+        iUserService.insertIUser(iUserVO);
         return R.ok();
     }
 

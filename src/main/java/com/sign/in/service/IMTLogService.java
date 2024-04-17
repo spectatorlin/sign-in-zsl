@@ -1,7 +1,7 @@
 package com.sign.in.service;
 
-import com.oddfar.campus.business.entity.ILog;
-import com.oddfar.campus.common.domain.PageResult;
+import com.sign.in.common.PageResult;
+import com.sign.in.entity.ILog;
 
 /**
  * i茅台 日志

@@ -4,6 +4,7 @@ import com.sign.in.common.R;
 import com.sign.in.mapper.IItemMapper;
 import com.sign.in.service.IShopService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,14 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class IItemController {
 
-    private final IItemMapper iItemMapper;
-    private final IShopService iShopService;
 
     /**
      * 查询I茅台预约商品列列表
      */
     @GetMapping(value = "/list", name = "查询I茅台预约商品列列表")
     public R list() {
+
         return R.ok();
     }
 

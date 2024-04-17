@@ -11,6 +11,7 @@ import com.sign.in.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,15 +24,15 @@ import java.util.Map;
  * @date 2023-07-02
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @TableName("i_user")
-public class IUser extends BaseEntity {
+public class IUser extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * 手机号
      */
-    @TableId
+    @TableId(value = "mobile")
     private Long mobile;
 
     /**

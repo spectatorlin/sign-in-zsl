@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/imt/log")
 @RequiredArgsConstructor
 public class ILogController {
-    private final IMTLogService logService;
 
     @GetMapping(value = "/list", name = "操作日志-分页")
     public R list(ILog log) {

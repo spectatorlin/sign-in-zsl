@@ -1,66 +1,33 @@
 package com.sign.in.service;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.oddfar.campus.business.entity.IUser;
-import com.oddfar.campus.common.domain.PageResult;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.sign.in.common.R;
+import com.sign.in.entity.IUser;
+import com.sign.in.entity.domain.IUserVO;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IUserService extends IService<IUser> {
+    /**
+     * 预约
+     */
+    public R reservation(String mobile);
 
-    PageResult<IUser> page(IUser iUser);
+    /**
+     * 发送手机验证码
+     *
+     * @param mobile   手机号
+     * @param deviceId 设备id
+     */
+    R sendCode(String mobile, String deviceId);
 
     /**
      * 添加i茅台用户
      *
-     * @param mobile
-     * @param body
+     * @param iUserVO
      * @return
      */
-    int insertIUser(Long mobile, String deviceId, JSONObject body);
+    R insertIUser(IUserVO iUserVO);
 
-    /**
-     * 查询预约用户列表
-     *
-     * @return
-     */
-    List<IUser> selectReservationUser();
-
-    /**
-     * 通过预约执行分钟查询预约用户列表
-     *
-     * @return
-     */
-    List<IUser> selectReservationUserByMinute(int minute);
-
-    /**
-     * 添加i茅台用户
-     *
-     * @param iUser
-     * @return
-     */
-    int insertIUser(IUser iUser);
-
-    /**
-     * 修改I茅台用户
-     *
-     * @param iUser I茅台用户
-     * @return 结果
-     */
-    int updateIUser(IUser iUser);
-
-    /**
-     * 批量修改用户随机预约的时间
-     *
-     * @return
-     */
-    void updateUserMinuteBatch();
-
-    /**
-     * 删除用户
-     *
-     * @param iUserId id
-     * @return
-     */
-    int deleteIUser(Long[] iUserId);
 }

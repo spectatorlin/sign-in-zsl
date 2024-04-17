@@ -1,20 +1,14 @@
 --- # 数据源配置
 spring:
-
   #数据源配置
   datasource:
     # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
     # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
-    url: jdbc:mysql://localhost:3306/oddfar_campus?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/imaotai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
     username: root
     password: 123456
     driverClassName: com.mysql.cj.jdbc.Driver
 
-server:
-  port: 8160
-
---- # redis
-spring:
   redis:
     # 地址
     host: localhost
@@ -26,3 +20,51 @@ spring:
     password: 123456
     # 连接超时时间
     timeout: 10s
+
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 20MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
+  #MyWebMvcConfig中开启@EnableWebMvc则失效
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+
+
+server:
+  port: 8160
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（单位分钟）
+  expireTime: 1440
+
+# MyBatisPlus配置
+# https://baomidou.com/pages/56bac0/
+mybatis-plus:
+  # 不支持多包, 如有需要可在注解配置 或 提升扫包等级
+  # 例如 com.**.**.mapper
+  mapperPackage: com.sign.in.**.mapper
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.sign.in.**.domain
+  configuration:
+    # 自动驼峰命名规则（camel case）映射
+    mapUnderscoreToCamelCase: true
+    # MyBatis 自动映射策略
+    # NONE：不启用 PARTIAL：只对非嵌套 resultMap 自动映射 FULL：对所有 resultMap 自动映射
+    autoMappingBehavior: FULL
+    # MyBatis 自动映射时未知列或未知属性处理策
+    # NONE：不做处理 WARNING：打印相关警告 FAILING：抛出异常和详细信息
+    autoMappingUnknownColumnBehavior: NONE
+    # 更详细的日志输出 会有性能损耗 org.apache.ibatis.logging.stdout.StdOutImpl
+    # 关闭日志记录 (可单纯使用 p6spy 分析) org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # 默认日志输出 org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

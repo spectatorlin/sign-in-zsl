@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 @Data
 @TableName("i_log")
-public class ILog {
+public class ILog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

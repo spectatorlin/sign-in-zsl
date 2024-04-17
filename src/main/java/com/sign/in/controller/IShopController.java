@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/imt/shop")
 @RequiredArgsConstructor
 public class IShopController {
-    private final IShopService iShopService;
-    private final IShopMapper iShopMapper;
+
 
     /**
      * 查询i茅台商品列表
