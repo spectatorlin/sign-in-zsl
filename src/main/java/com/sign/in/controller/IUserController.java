@@ -11,12 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * I茅台用户Controller
- *
- * @author oddfar
- * @date 2023-07-06
- */
+
 @RestController
 @RequestMapping("/imt/user")
 public class IUserController {
@@ -76,8 +71,7 @@ public class IUserController {
      */
     @PostMapping(name = "新增I茅台用户")
     public R add(@RequestBody IUserVO iUserVO) {
-        iUserService.insertIUser(iUserVO);
-        return R.ok();
+        return iUserService.insertIUser(iUserVO);
     }
 
     /**

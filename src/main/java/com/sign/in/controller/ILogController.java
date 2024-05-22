@@ -6,12 +6,7 @@ import com.sign.in.service.IMTLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * I茅台日志Controller
- *
- * @author oddfar
- * @date 2023-08-01
- */
+
 @RestController
 @RequestMapping("/imt/log")
 @RequiredArgsConstructor

@@ -11,8 +11,8 @@ import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sign.in.common.GDClient;
 import com.sign.in.common.R;
 import com.sign.in.config.RedisCache;
 import com.sign.in.entity.IUser;
@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
@@ -47,9 +48,15 @@ public class IUserServiceImpl extends ServiceImpl<IUserMapper, IUser> implements
     @Autowired
     private IUserMapper iUserMapper;
     @Autowired
+    private IUserService iUserService;
+    @Autowired
     private IMTService imtService;
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private GDClient gdClient;
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
     private final static String SALT = "2af72f100c356273d46284f6fd1dfc08";
 
@@ -95,12 +102,12 @@ public class IUserServiceImpl extends ServiceImpl<IUserMapper, IUser> implements
         IUser iUser = iUserVO.getIUser();
         String code = iUserVO.getCode();
         Long phone = iUser.getMobile();
-        if (iUserMapper.selectById(phone)!=null) {
-            return R.error("不能重复添加用户");
-        }
         String mobile = String.valueOf(iUser.getMobile());
         if (StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
             return R.error("参数不能为空");
+        }
+        if (iUserMapper.selectById(phone)!=null) {
+            return R.error("不能重复添加用户");
         }
         String deviceId=UUID.randomUUID().toString().toLowerCase();
 
@@ -112,10 +119,26 @@ public class IUserServiceImpl extends ServiceImpl<IUserMapper, IUser> implements
         iUser.setCookie(data.getString("cookie"));
         iUser.setDeviceId(deviceId);
 
+        String address = iUser.getAddress();
+        //调用高德地理编码api接口，根据地址获取经纬度
+//        String url = String.format("https://restapi.amap.com/v3/geocode/geo?address={}&key=b4a6ce9966cd7e7117bee0917b4f881c",address);
+//        JSONObject body = JSONObject.parseObject(HttpUtil.get(url));
+//        JSONObject geocodes = (JSONObject) body.getJSONArray("geocodes").get(0);
+//        String location = geocodes.getString("location");
+//        String[] split = location.split(",");
+        String[] lngLat = gdClient.getLngLat(address);
+        if (lngLat[0]==null || lngLat[1]==null){
+            logger.error("调用高德地理编码api接口失败");
+        }else {
+            iUser.setLng(lngLat[0]);
+            iUser.setLat(lngLat[1]);
+        }
         boolean b = save(iUser);
         if (b) return R.ok();
         return R.error("新增用户失败");
     }
+
+
 
     public JSONObject login(String mobile, String code,String deviceId) {
         Map<String, String> map = new HashMap<>();
@@ -179,6 +202,19 @@ public class IUserServiceImpl extends ServiceImpl<IUserMapper, IUser> implements
 //        getEnergyAwardDelay(iUser);
 
         return R.ok();
+    }
+    @Override
+    public void batchReservation() {
+        List<IUser> iUserList = iUserService.list();
+        for (IUser iUser : iUserList) {
+            try {
+                taskExecutor.submit(() -> {
+                    reservation(String.valueOf(iUser.getMobile()));
+                });
+            }catch (Exception e){
+                logger.error("预约失败，本地错误日志已记录", e);
+            }
+        }
     }
 
 

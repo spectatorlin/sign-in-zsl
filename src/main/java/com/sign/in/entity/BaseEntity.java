@@ -38,7 +38,7 @@ public class BaseEntity implements Serializable {
     @TableField(fill = FieldFill.UPDATE)
     private Long updateUser;
 
-    @TableLogic
+//    @TableLogic
     @TableField(fill = FieldFill.INSERT)
     @JsonIgnore
     private Integer delFlag;

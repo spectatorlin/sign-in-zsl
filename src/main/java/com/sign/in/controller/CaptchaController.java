@@ -20,11 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 验证码操作处理
- *
- * @author ruoyi
- */
+
 @RestController
 public class CaptchaController {
 

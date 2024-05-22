@@ -9,12 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * I茅台预约商品列表Controller
- *
- * @author oddfar
- * @date 2023-07-05
- */
+
 @RestController
 @RequestMapping("/imt/item")
 @RequiredArgsConstructor
